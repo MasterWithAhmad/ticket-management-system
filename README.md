@@ -38,7 +38,7 @@ Here are some screenshots of the application:
 
 1. Clone the repository
    ```
-   git clone https://github.com/yourusername/ticket-management-system.git
+   git clone https://github.com/MasterWithAhmad/ticket-management-system.git
    cd ticket-management-system
    ```
 
