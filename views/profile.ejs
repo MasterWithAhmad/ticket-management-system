@@ -1,0 +1,42 @@
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-user me-1"></i>
+                My Profile
+            </div>
+            <div class="card-body">
+                <form action="/users/profile" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<%= profileUser.name %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= profileUser.email %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Department</label>
+                        <select class="form-select" id="department" name="department" required>
+                            <option value="" disabled>Select Department</option>
+                            <option value="IT" <%= profileUser.department === 'IT' ? 'selected' : '' %>>IT</option>
+                            <option value="HR" <%= profileUser.department === 'HR' ? 'selected' : '' %>>HR</option>
+                            <option value="Finance" <%= profileUser.department === 'Finance' ? 'selected' : '' %>>Finance</option>
+                            <option value="Marketing" <%= profileUser.department === 'Marketing' ? 'selected' : '' %>>Marketing</option>
+                            <option value="Sales" <%= profileUser.department === 'Sales' ? 'selected' : '' %>>Sales</option>
+                            <option value="Operations" <%= profileUser.department === 'Operations' ? 'selected' : '' %>>Operations</option>
+                            <option value="Customer Support" <%= profileUser.department === 'Customer Support' ? 'selected' : '' %>>Customer Support</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <input type="text" class="form-control" id="role" value="<%= profileUser.role %>" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Profile</button>
+                    <a href="/users/change-password" class="btn btn-secondary">Change Password</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

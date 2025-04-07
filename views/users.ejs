@@ -1,0 +1,84 @@
+
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-users me-1"></i>
+        User Management
+        <a href="/users/new" class="btn btn-primary btn-sm float-end">
+            <i class="fas fa-plus"></i> Add New User
+        </a>
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                <% users.forEach(user => { %>
+                    <tr>
+                        <td><%= user.id %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.email %></td>
+                        <td>
+                            <span class="badge <%= user.role === 'admin' ? 'bg-danger' : 'bg-primary' %>">
+                                <%= user.role %>
+                            </span>
+                        </td>
+                        <td><%= user.department %></td>
+                        <td><%= new Date(user.created_at).toLocaleDateString() %></td>
+                        <td>
+                            <a href="/users/<%= user.id %>/edit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <% if (user.id != locals.user.id) { %>
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal<%= user.id %>">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteModal<%= user.id %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= user.id %>" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteModalLabel<%= user.id %>">Confirm Delete</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Are you sure you want to delete user <strong><%= user.name %></strong>?
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="/users/<%= user.id %>/delete" method="POST" class="d-inline">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div> 

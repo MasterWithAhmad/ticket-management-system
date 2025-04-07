@@ -1,0 +1,222 @@
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-ticket-alt me-1"></i>
+                        Ticket #<%= ticket.id %>: <%= ticket.title %>
+                    </div>
+                    <div>
+                        <a href="/tickets/<%= ticket.id %>/edit" class="btn btn-primary btn-sm">
+                            <i class="fas fa-edit"></i> Edit
+                        </a>
+                        <% if (typeof user !== 'undefined' && user && user.role === 'admin') { %>
+                            <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <div class="row mb-2">
+                        <div class="col-md-3 fw-bold">Status:</div>
+                        <div class="col-md-9">
+                            <span class="badge <%= 
+                                ticket.status === 'open' ? 'bg-warning' : 
+                                ticket.status === 'in_progress' ? 'bg-info' : 
+                                ticket.status === 'resolved' ? 'bg-success' : 'bg-secondary'
+                            %>">
+                                <%= ticket.status.replace('_', ' ') %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 fw-bold">Priority:</div>
+                        <div class="col-md-9">
+                            <span class="badge <%= 
+                                ticket.priority === 'high' ? 'bg-danger' : 
+                                ticket.priority === 'medium' ? 'bg-warning' : 'bg-info'
+                            %>">
+                                <%= ticket.priority %>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 fw-bold">Category:</div>
+                        <div class="col-md-9"><%= ticket.category %></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 fw-bold">Created By:</div>
+                        <div class="col-md-9"><%= ticket.creator_name %></div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 fw-bold">Assigned To:</div>
+                        <div class="col-md-9">
+                            <%= ticket.assignee_name || 'Unassigned' %>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-3 fw-bold">Created:</div>
+                        <div class="col-md-9"><%= new Date(ticket.created_at).toLocaleString() %></div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-3 fw-bold">Updated:</div>
+                        <div class="col-md-9"><%= new Date(ticket.updated_at).toLocaleString() %></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 fw-bold mb-2">Description:</div>
+                        <div class="col-12">
+                            <div class="p-3 bg-light rounded">
+                                <%= ticket.description %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-comments me-1"></i>
+                Comments
+            </div>
+            <div class="card-body">
+                <% if (comments && comments.length > 0) { %>
+                    <% comments.forEach(comment => { %>
+                        <div class="d-flex mb-4">
+                            <div class="flex-shrink-0">
+                                <img class="rounded-circle" src="https://via.placeholder.com/50" alt="<%= comment.user_name %>" />
+                            </div>
+                            <div class="ms-3">
+                                <div class="fw-bold">
+                                    <%= comment.user_name %>
+                                    <small class="text-muted ms-2">
+                                        <%= new Date(comment.created_at).toLocaleString() %>
+                                    </small>
+                                </div>
+                                <%= comment.content %>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } else { %>
+                    <p class="text-center">No comments yet.</p>
+                <% } %>
+
+                <!-- Add Comment Form -->
+                <div class="card mt-4">
+                    <div class="card-header">Add Comment</div>
+                    <div class="card-body">
+                        <form action="/tickets/<%= ticket.id %>/comments" method="POST">
+                            <div class="mb-3">
+                                <textarea class="form-control" name="content" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <!-- Ticket Actions -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-tasks me-1"></i>
+                Ticket Actions
+            </div>
+            <div class="card-body">
+                <form action="/tickets/<%= ticket.id %>" method="POST">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Change Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="open" <%= ticket.status === 'open' ? 'selected' : '' %>>Open</option>
+                            <option value="in_progress" <%= ticket.status === 'in_progress' ? 'selected' : '' %>>In Progress</option>
+                            <option value="resolved" <%= ticket.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
+                            <option value="closed" <%= ticket.status === 'closed' ? 'selected' : '' %>>Closed</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">Change Priority</label>
+                        <select class="form-select" id="priority" name="priority">
+                            <option value="low" <%= ticket.priority === 'low' ? 'selected' : '' %>>Low</option>
+                            <option value="medium" <%= ticket.priority === 'medium' ? 'selected' : '' %>>Medium</option>
+                            <option value="high" <%= ticket.priority === 'high' ? 'selected' : '' %>>High</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assigned_to" class="form-label">Assign To</label>
+                        <select class="form-select" id="assigned_to" name="assigned_to">
+                            <option value="">Unassigned</option>
+                            <% users.forEach(user => { %>
+                                <option value="<%= user.id %>" <%= ticket.assigned_to == user.id ? 'selected' : '' %>>
+                                    <%= user.name %> (<%= user.department %>)
+                                </option>
+                            <% }); %>
+                        </select>
+                    </div>
+                    <input type="hidden" name="title" value="<%= ticket.title %>">
+                    <input type="hidden" name="description" value="<%= ticket.description %>">
+                    <input type="hidden" name="category" value="<%= ticket.category %>">
+                    <button type="submit" class="btn btn-primary w-100">Update Ticket</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Related Tickets -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-link me-1"></i>
+                Quick Links
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="/tickets">All Tickets</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/tickets/status/<%= ticket.status %>">
+                            <%= ticket.status.charAt(0).toUpperCase() + ticket.status.slice(1).replace('_', ' ') %> Tickets
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/tickets/created">My Created Tickets</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/tickets/my-tickets">My Assigned Tickets</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="/tickets/new">Create New Ticket</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<% if (typeof user !== 'undefined' && user && user.role === 'admin') { %>
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete ticket <strong>#<%= ticket.id %></strong>?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <form action="/tickets/<%= ticket.id %>/delete" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<% } %> 

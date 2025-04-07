@@ -1,0 +1,51 @@
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-user-edit me-1"></i>
+                <%= action === 'create' ? 'Create New User' : 'Edit User' %>
+            </div>
+            <div class="card-body">
+                <form action="<%= action === 'create' ? '/users' : '/users/' + userData.id %>" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" value="<%= userData ? userData.name : '' %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" value="<%= userData ? userData.email : '' %>" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="role" class="form-label">Role</label>
+                        <select class="form-select" id="role" name="role" required>
+                            <option value="user" <%= userData && userData.role === 'user' ? 'selected' : '' %>>User</option>
+                            <option value="admin" <%= userData && userData.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="department" class="form-label">Department</label>
+                        <select class="form-select" id="department" name="department" required>
+                            <option value="" disabled <%= !userData || !userData.department ? 'selected' : '' %>>Select Department</option>
+                            <option value="IT" <%= userData && userData.department === 'IT' ? 'selected' : '' %>>IT</option>
+                            <option value="HR" <%= userData && userData.department === 'HR' ? 'selected' : '' %>>HR</option>
+                            <option value="Finance" <%= userData && userData.department === 'Finance' ? 'selected' : '' %>>Finance</option>
+                            <option value="Marketing" <%= userData && userData.department === 'Marketing' ? 'selected' : '' %>>Marketing</option>
+                            <option value="Sales" <%= userData && userData.department === 'Sales' ? 'selected' : '' %>>Sales</option>
+                            <option value="Operations" <%= userData && userData.department === 'Operations' ? 'selected' : '' %>>Operations</option>
+                            <option value="Customer Support" <%= userData && userData.department === 'Customer Support' ? 'selected' : '' %>>Customer Support</option>
+                        </select>
+                    </div>
+                    <% if (action === 'create') { %>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                    <% } %>
+                    <button type="submit" class="btn btn-primary"><%= action === 'create' ? 'Create User' : 'Update User' %></button>
+                    <a href="/users" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div> 

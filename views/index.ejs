@@ -1,0 +1,211 @@
+<!-- Stats Cards -->
+<div class="row">
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-primary text-white mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>Total Tickets</div>
+                    <div class="fs-4"><%= stats.total %></div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="/tickets">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-warning text-white mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>Open Tickets</div>
+                    <div class="fs-4"><%= stats.open %></div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="/tickets/status/open">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-success text-white mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>In Progress</div>
+                    <div class="fs-4"><%= stats.in_progress %></div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="/tickets/status/in_progress">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="card bg-danger text-white mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>High Priority</div>
+                    <div class="fs-4"><%= stats.high_priority %></div>
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center justify-content-between">
+                <a class="small text-white stretched-link" href="/tickets">View Details</a>
+                <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Tickets and Assigned Tickets -->
+<div class="row">
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-ticket-alt me-1"></i>
+                Recent Tickets
+                <a href="/tickets" class="btn btn-primary btn-sm float-end">View All</a>
+            </div>
+            <div class="card-body">
+                <% if (tickets && tickets.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% tickets.forEach(ticket => { %>
+                                    <tr>
+                                        <td><%= ticket.id %></td>
+                                        <td>
+                                            <a href="/tickets/<%= ticket.id %>"><%= ticket.title %></a>
+                                        </td>
+                                        <td>
+                                            <span class="badge <%= 
+                                                ticket.status === 'open' ? 'bg-warning' : 
+                                                ticket.status === 'in_progress' ? 'bg-info' : 
+                                                ticket.status === 'resolved' ? 'bg-success' : 'bg-secondary'
+                                            %>">
+                                                <%= ticket.status.replace('_', ' ') %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge <%= 
+                                                ticket.priority === 'high' ? 'bg-danger' : 
+                                                ticket.priority === 'medium' ? 'bg-warning' : 'bg-info'
+                                            %>">
+                                                <%= ticket.priority %>
+                                            </span>
+                                        </td>
+                                        <td><%= ticket.creator_name %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-center">No tickets found.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-clipboard-list me-1"></i>
+                My Assigned Tickets
+                <a href="/tickets/my-tickets" class="btn btn-primary btn-sm float-end">View All</a>
+            </div>
+            <div class="card-body">
+                <% if (assignedTickets && assignedTickets.length > 0) { %>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Created By</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% assignedTickets.forEach(ticket => { %>
+                                    <tr>
+                                        <td><%= ticket.id %></td>
+                                        <td>
+                                            <a href="/tickets/<%= ticket.id %>"><%= ticket.title %></a>
+                                        </td>
+                                        <td>
+                                            <span class="badge <%= 
+                                                ticket.status === 'open' ? 'bg-warning' : 
+                                                ticket.status === 'in_progress' ? 'bg-info' : 
+                                                ticket.status === 'resolved' ? 'bg-success' : 'bg-secondary'
+                                            %>">
+                                                <%= ticket.status.replace('_', ' ') %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="badge <%= 
+                                                ticket.priority === 'high' ? 'bg-danger' : 
+                                                ticket.priority === 'medium' ? 'bg-warning' : 'bg-info'
+                                            %>">
+                                                <%= ticket.priority %>
+                                            </span>
+                                        </td>
+                                        <td><%= ticket.creator_name %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="text-center">No tickets assigned to you.</p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Links -->
+<div class="row">
+    <div class="col-xl-12">
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-link me-1"></i>
+                Quick Actions
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <a href="/tickets/new" class="btn btn-primary btn-lg d-block">
+                            <i class="fas fa-plus me-2"></i> Create New Ticket
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/tickets/my-tickets" class="btn btn-info btn-lg d-block">
+                            <i class="fas fa-clipboard-list me-2"></i> My Tickets
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/charts" class="btn btn-success btn-lg d-block">
+                            <i class="fas fa-chart-bar me-2"></i> View Reports
+                        </a>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <a href="/users/profile" class="btn btn-secondary btn-lg d-block">
+                            <i class="fas fa-user me-2"></i> My Profile
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 
